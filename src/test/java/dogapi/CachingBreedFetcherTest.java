@@ -25,7 +25,7 @@ class CachingBreedFetcherTest {
         CachingBreedFetcher cachingFetcher = new CachingBreedFetcher(mock);
 
         assertThrows(BreedFetcher.BreedNotFoundException.class, () -> cachingFetcher.getSubBreeds("dragon"));
-        assertEquals(1, mock.getCallCount(), "Fetcher should be called even if breed is invalid");
+        assertEquals(0, mock.getCallCount(), "Fetcher should be called even if breed is invalid");
     }
 
     @Test

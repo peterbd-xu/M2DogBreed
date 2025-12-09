@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         String breed = "hound";
-        BreedFetcher breedFetcher = new DogApiBreedFetcher();
+        BreedFetcher breedFetcher = new CachingBreedFetcher(new DogApiBreedFetcher());
         int result = getNumberOfSubBreeds(breed, breedFetcher);
         System.out.println(breed + " has " + result + " sub breeds");
 

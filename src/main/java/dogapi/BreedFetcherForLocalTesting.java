@@ -11,7 +11,7 @@ public class BreedFetcherForLocalTesting implements BreedFetcher {
     private int callCount = 0;
 
     @Override
-    public List<String> getSubBreeds(String breed) {
+    public List<String> getSubBreeds(String breed) throws BreedFetcher.BreedNotFoundException {
         callCount++;
         try{
         if ("hound".equalsIgnoreCase(breed)) {

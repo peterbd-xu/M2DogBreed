@@ -15,16 +15,49 @@ import java.util.*;
 public class CachingBreedFetcher implements BreedFetcher {
     // TODO Task 2: Complete this class
     private int callsMade = 0;
-    public CachingBreedFetcher(BreedFetcher fetcher) {
+    DogApiBreedFetcher fetcher = new DogApiBreedFetcher();
+    BreedFetcherForLocalTesting fetcherForLocalTesting = new BreedFetcherForLocalTesting();
+    public static HashMap cache = new HashMap();
 
+    public CachingBreedFetcher(BreedFetcher fetcher) {
+        if  (fetcher instanceof DogApiBreedFetcher) {
+            this.fetcher = (DogApiBreedFetcher) fetcher;
+            this.fetcherForLocalTesting = null;
+        }
+        else if  (fetcher instanceof BreedFetcherForLocalTesting) {
+            this.fetcherForLocalTesting = (BreedFetcherForLocalTesting) fetcher;
+            this.fetcher = null;
+        }
     }
+
 
     @Override
-    public List<String> getSubBreeds(String breed) {
-        // return statement included so that the starter code can compile and run.
-        return new ArrayList<>();
-    }
+    public List<String> getSubBreeds(String breed) throws BreedNotFoundException {
+        ArrayList<String> subBreeds = new ArrayList<>();
+        try {
+            if (cache.get(breed) != null) {
+                return (List<String>) cache.get(breed);
+            } else if (fetcher != null) {
+                for (String s : fetcher.getSubBreeds(breed)) {
+                    subBreeds.add(s);
+                }
+                cache.put(breed, subBreeds);
+            } else {
 
+                for (String s : fetcherForLocalTesting.getSubBreeds(breed)) {
+                    subBreeds.add(s);
+                }
+                cache.put(breed, subBreeds);
+            }
+        } catch (BreedFetcher.BreedNotFoundException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        callsMade++;
+
+            // return statement included so that the starter code can compile and run.
+            return subBreeds;
+        }
     public int getCallsMade() {
         return callsMade;
     }
