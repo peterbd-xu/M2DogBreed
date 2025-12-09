@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         String breed = "hound";
-        BreedFetcher breedFetcher = new CachingBreedFetcher(new BreedFetcherForLocalTesting());
+        BreedFetcher breedFetcher = new DogApiBreedFetcher();
         int result = getNumberOfSubBreeds(breed, breedFetcher);
         System.out.println(breed + " has " + result + " sub breeds");
 
@@ -26,6 +26,16 @@ public class Main {
     public static int getNumberOfSubBreeds(String breed, BreedFetcher breedFetcher) {
         // TODO Task 3 implement this code so that it is entirely consistent with its provided documentation.
         // return statement included so that the starter code can compile and run.
-        return -1;
+        int result = 0;
+        try {
+        for (int i = 0; i < breedFetcher.getSubBreeds(breed).size(); i++) {
+            result ++;
+        }
+        return result;
+         }
+        catch (BreedFetcher.BreedNotFoundException e) {
+            return 0;
+        }
+
     }
 }
